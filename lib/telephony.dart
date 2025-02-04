@@ -339,12 +339,40 @@ class Telephony {
     required String message,
   }) async {
     final Map<String, dynamic> args = {
-      "address": to,
+      "address": _platform.isAndroid ? to : [to],
       "message_body": message,
     };
     await _foregroundChannel.invokeMethod(SEND_SMS_INTENT, args);
   }
 
+  /// 
+  /// 이 메서드는 iOS에서 SMS 다이얼로그(메시지 작성 화면)를 열기 위해,
+  /// Flutter의 MethodChannel(_foregroundChannel)를 통해 네이티브 iOS 코드의 "sendSmsByIos" 메서드를 호출합니다.
+  /// 
+  /// Parameters:
+  ///   - [message]: 전송할 SMS 메시지 (문자열)
+  ///   - [recipients]: 수신자 번호 리스트 (여러 개일 경우 리스트로 전달)
+  ///
+  Future<String> sendSmsByIos({
+    required String message,
+    required String recipients,
+  }) async {
+    // 호출할 인자를 구성합니다.
+    final Map<String, dynamic> args = {
+      "message": message,
+      "recipients": recipients,
+    };
+
+    // _foregroundChannel를 통해 네이티브 iOS 코드의 sendSmsByIos 메서드를 호출합니다.
+    // 네이티브 측에서는 SwiftTelephonyPlugin.handle(_:) 내에서 "sendSmsByIos" 케이스가 처리됩니다.
+    final String result = await _foregroundChannel.invokeMethod<String>(
+      SEND_SMS_BY_IOS,
+      args,
+    ) as String;
+
+    return result;
+  }
+      
   ///
   /// Checks if the device has necessary features to send and receive SMS.
   ///

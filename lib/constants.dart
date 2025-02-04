@@ -12,6 +12,8 @@ const GET_ALL_CONVERSATIONS = "getAllConversations";
 const SEND_SMS = "sendSms";
 const SEND_MULTIPART_SMS = "sendMultipartSms";
 const SEND_SMS_INTENT = "sendSmsIntent";
+const SEND_SMS_BY_IOS = "sendSmsByIos";
+
 const IS_SMS_CAPABLE = "isSmsCapable";
 const GET_CELLULAR_DATA_STATE = "getCellularDataState";
 const GET_CALL_STATE = "getCallState";
